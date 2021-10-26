@@ -3,11 +3,13 @@ name: Main
 on:
   push:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/15 * * * *'
 
 jobs:
   get-version:
     runs-on: ubuntu-latest
+    outputs: 
+      run_build_jobs: ${{ steps.results.outputs.run_build }}
     steps:
       - uses: actions/checkout@v2
       - name: Get Latest Forge CLI Release
@@ -15,6 +17,19 @@ jobs:
         run: |
           echo ::set-output name=release_tag::$(curl -sL https://api.github.com/repos/laravel/forge-cli/releases/latest | jq -r ".tag_name")
           echo ::set-output name=current_tag::$(curl -sL https://api.github.com/repos/vtalbot/forge-cli-ci/releases/latest | jq -r ".tag_name")
+      - name: Validate Versions
+        id: results
+        run: |
+          if [[ "${{ steps.version.outputs.release_tag }}" == "${{ steps.version.outputs.current_tag }}" ]]; then
+            echo ::set-output name=run_build::false
+          else
+            echo ::set-output name=run_build::true
+          fi
+  build:
+    runs-on: ubuntu-latest
+    needs: [get-version]
+    if: needs.get-version.outputs.run_build_jobs == 'true'
+    steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
