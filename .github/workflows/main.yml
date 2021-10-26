@@ -6,7 +6,7 @@ on:
     - cron: '*/15 * * * *'
 
 jobs:
-  get-version:
+  check-version:
     runs-on: ubuntu-latest
     outputs: 
       run_build_jobs: ${{ steps.results.outputs.run_build }}
@@ -27,8 +27,8 @@ jobs:
           fi
   build:
     runs-on: ubuntu-latest
-    needs: [get-version]
-    if: needs.get-version.outputs.run_build_jobs == 'true'
+    needs: [check-version]
+    if: needs.check-version.outputs.run_build_jobs == 'true'
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
