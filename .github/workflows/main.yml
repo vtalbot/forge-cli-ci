@@ -9,7 +9,7 @@ jobs:
   get-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: action/checkout@v2
+      - uses: actions/checkout@v2
       - name: Get Latest Forge CLI Release
         id: version
         run: |
