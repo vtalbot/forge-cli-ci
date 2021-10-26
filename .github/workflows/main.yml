@@ -30,8 +30,8 @@ jobs:
         with:
           context: .
           push: true
-          build-args:
-            version: ${{ steps.version.outputs.release_tag }}
+          build-args: |
+            version=${{ steps.version.outputs.release_tag }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/forge-cli:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/forge-cli:${{ steps.version.outputs.release_tag }}
