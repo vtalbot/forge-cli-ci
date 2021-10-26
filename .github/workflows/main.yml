@@ -1,6 +1,7 @@
 name: Main
 
 on:
+  push:
   schedule:
     - cron: '*/10 * * * *'
 
