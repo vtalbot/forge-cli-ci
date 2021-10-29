@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs: 
       run_build_jobs: ${{ steps.results.outputs.run_build }}
+      release_tag: ${{ steps.version.outputs.release_tag }}
+      current_tag: ${{ steps.version.outputs.current_tag }}
     steps:
       - uses: actions/checkout@v2
       - name: Get Latest Forge CLI Release
